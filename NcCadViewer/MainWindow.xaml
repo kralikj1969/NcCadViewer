@@ -1,0 +1,113 @@
+﻿<Window x:Class="NcCadViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
+        Title="NcCadViewer" Height="600" Width="1000">
+
+    <DockPanel>
+
+        <!-- Levý panel – ovládací menu -->
+        <Border DockPanel.Dock="Left" Background="#182575" Padding="10">
+            <StackPanel Width="260">
+
+                <!-- Načítání souborů -->
+                <TextBlock Text="Soubory"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="0,6,0,6"/>
+
+                <Button Content="Nahrát STL model"
+                        Margin="0,4,0,4"
+                        Click="LoadStl_Click"/>
+
+                <Button Content="Otevřít NC"
+                        Margin="0,4,0,12"
+                        Click="OpenNc_Click"/>
+
+                <Separator/>
+
+                <!-- Operace -->
+                <TextBlock Text="Operace"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="0,6,0,6"/>
+
+                <ItemsControl ItemsSource="{Binding Operations}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Name}"
+                                      IsChecked="{Binding IsVisible}"
+                                      Foreground="White"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Separator/>
+
+                <!-- Osa -->
+                <CheckBox x:Name="ChkAxis"
+                          Content="Osový kříž"
+                          Foreground="White"
+                          Margin="0,10,0,10"
+                          IsChecked="True"/>
+
+                <Separator/>
+
+                <!-- PROFESIONÁLNÍ MĚŘICÍ PANEL -->
+                <TextBlock Text="Měření"
+                           Foreground="White"
+                           FontWeight="Bold"
+                           Margin="0,10,0,6"/>
+
+                <StackPanel Orientation="Vertical" Margin="0,4">
+
+                    <RadioButton Content="Konec měření"
+                                 GroupName="MeasureGroup"
+                                 Tag="0"
+                                 IsChecked="True"
+                                 Foreground="White"
+                                 Checked="MeasurementModeChanged"/>
+
+                    <RadioButton Content="Vzdálenost (2 body)"
+                                 GroupName="MeasureGroup"
+                                 Tag="1"
+                                 Foreground="White"
+                                 Checked="MeasurementModeChanged"/>
+
+                    <RadioButton Content="Kružnice (3 body)"
+                                 GroupName="MeasureGroup"
+                                 Tag="2"
+                                 Foreground="White"
+                                 Checked="MeasurementModeChanged"/>
+
+                    <RadioButton Content="Od okraje k okraji"
+                                 GroupName="MeasureGroup"
+                                 Tag="6"
+                                 Foreground="White"
+                                 Checked="MeasurementModeChanged"/>
+
+                    <Separator Margin="0,10,0,10"/>
+
+                    <Button Content="🧹 Vymazat měření"
+                            Click="ClearMeasurement_Click"
+                            Margin="0,4,0,0"/>
+                </StackPanel>
+
+            </StackPanel>
+        </Border>
+
+        <!-- 3D okno -->
+        <h:HelixViewport3D x:Name="View"
+                           ZoomExtentsWhenLoaded="True"
+                           ShowFrameRate="False">
+
+            <h:SunLight/>
+
+            <ModelVisual3D x:Name="ModelRoot"/>
+            <ModelVisual3D x:Name="NcRoot"/>
+            <h:CoordinateSystemVisual3D x:Name="Axis" ArrowLengths="40"/>
+
+        </h:HelixViewport3D>
+
+    </DockPanel>
+</Window>
